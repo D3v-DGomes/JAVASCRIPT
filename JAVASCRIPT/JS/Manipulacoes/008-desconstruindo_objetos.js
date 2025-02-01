@@ -3,8 +3,14 @@ let person = {
     lastName: 'Silva',
     age: 95,
     social: {
-        instagram: '@dsilva_',
-        facebook: 'David Silva'
+        instagram: {
+            url: '@dsilva_',
+            followers: 1564
+        },
+        facebook: {
+            id: 'David S.',
+            numberOfPublications: 2301
+        }
     },
     fullName: function() {
         return `${this.firstName} ${this.lastName}`;
@@ -13,17 +19,29 @@ let person = {
 
 console.log(person.fullName());
 
-// Forma tradicional:
-
-let firstName = person.firstName;
-let lastName = person.lastName;
-let age = person.age;
-
-console.log(firstName, lastName, age);
-
 
 // Melhor maneira de desconstruir um objeto:
 
 let {firstName: nome, lastName: sobrenome, age: idade = 0} = person;    // estrutura: (objeto: novo nome da variável = valor da variável caso o objeto esteja vazio)
-
 console.log(nome, sobrenome, idade);
+
+
+let {firstName, lastName, social:{instagram:{url:instagram}}, social:{facebook}} = person;
+console.log(firstName, lastName, instagram, facebook);
+
+
+
+// Desconstruindo usando parâmetros:
+
+function getFullName({firstName = 'Sem nome', lastName = 'Sem sobrenome'}) {
+    return `${firstName} ${lastName}`;
+};
+
+
+console.log(getFullName(person));
+
+function getFullName_1({age, social:{facebook:{id: facebook}}, social:{instagram:{url:instagram}}}) {
+    return `Idade: ${age}, Facebook: ${facebook}, Instagram: ${instagram}`;
+};
+
+console.log(getFullName_1(person));
