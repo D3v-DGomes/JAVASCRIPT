@@ -49,7 +49,7 @@ function showInfo(json) {
     document.querySelector('.tempInfo').innerHTML = `${json.temp} <sup>ºC</sup>`;   // Para mostrar a temperatura.
     document.querySelector('.ventoInfo').innerHTML = `${json.windSpeed} <span>km/h</span>`; //Para mostrar o vento.
 
-    document.querySelector('.temp img').setAttribute('src', `http://openweathermap.org/img/wn/${json.tempIcon}d@2x.jpg`);   // Para deixar a imagem da previsão atualizada de acordo com a região.
+    document.querySelector('.temp img').setAttribute('src', `http://openweathermap.org/img/wn/${json.tempIcon}d@2x.png`);   // Para deixar a imagem da previsão atualizada de acordo com a região.
     document.querySelector('.ventoPonto').style.transform = `rotate(${json.windAngle - 90}deg)`;     // Para atualizar a direção do ponteiro do vento.
 
     document.querySelector('.resultado').style.display = 'block';       // Para fazer o quadro de informações aparecer
