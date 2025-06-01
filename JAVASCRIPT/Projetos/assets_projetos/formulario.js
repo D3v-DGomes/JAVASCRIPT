@@ -25,41 +25,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Adicionando validação de campo:
+const form = document.getElementById('cadastroForm');
 
+form.addEventListener('submit', function(e) {
+    // Evitando que o formulário não recarregue a página:
+    e.preventDefault();
 
+    const errorIcon = '<i class="fa-solid fa-circle-exclamation"></i>';
 
+    const name = document.getElementById('nome');
+    const nameValue = name.value;
+    const inputBox = name.closest('#nomeGroup');
 
+    const errorSpan = inputBox.querySelector('.error');
+    errorSpan.innerHTML = '';
 
+    inputBox.classList.remove('invalid');
 
-            // Aplica a formatação do CNPJ
-            value = value.slice(0, 14); // Limita a 14 dígitos
-            if (value.length > 2) {
-                value = value.slice(0, 2) + '.' + value.slice(2);
-            }
-            if (value.length > 6) {
-                value = value.slice(0, 6) + '.' + value.slice(6);
-            }
-            if (value.length > 10) {
-                value = value.slice(0, 10) + '/' + value.slice(10);
-            }
-            if (value.length > 15) {
-                value = value.slice(0, 15) + '-' + value.slice(15);
-            }
+    if (isEmpty(name)) {
+        errorSpan.innerHTML = `${errorIcon} Este campo é obrigatório`;
+        inputBox.classList.add('invalid');
+        return;
+    }
+});
 
-
-
-
-
-
-            
-            // Aplica a formatação do CPF
-            value = value.slice(0, 11); // Limita a 11 dígitos
-            if (value.length > 3) {
-                value = value.slice(0, 3) + '.' + value.slice(3);
-            }
-            if (value.length > 7) {
-                value = value.slice(0, 7) + '.' + value.slice(7);
-            }
-            if (value.length > 11) {
-                value = value.slice(0, 11) + '-' + value.slice(11);
-            }
+// Verificando se o campo está vazio:
+function isEmpty(value) {
+    return value === '';
+}

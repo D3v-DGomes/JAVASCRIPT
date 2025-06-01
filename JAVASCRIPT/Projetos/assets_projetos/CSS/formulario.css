@@ -41,6 +41,35 @@ input[type="text"] {
     box-sizing: border-box;
 }
 
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.error {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    max-width: 200px;
+}
+
+.form-group.invalid .form-label {
+    color: #dc2626;
+}
+.form-group.invalid .input-field {
+    border: 1px solid #dc2626;
+}
+
+.form-group.valid .form-label {
+    color: #22c55e;
+}
+.form-group.valid .input-field {
+    border: 1px solid #22c55e;
+}
+
 button[type="submit"] {
     background-color: #007bff;
     color: white;
