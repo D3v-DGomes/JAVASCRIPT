@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <link rel="stylesheet" href="./assets_projetos/CSS/formulario.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro</h1>
+        <form id="cadastroForm">
+            <div class="form-group" id="cpfCnpjGroup">
+                <label for="cpfCnpj">CPF</label>
+                <input type="text" id="cpfCnpj" name="cpfCnpj" placeholder="000.000.000-00">
+            </div>
+
+            <div class="form-group" id="nomeGroup">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" name="nome">
+            </div>
+
+            <div class="form-group" id="razaoSocialGroup" style="display: none;">
+                <label for="razaoSocial">Razão Social</label>
+                <input type="text" id="razaoSocial" name="razaoSocial">
+            </div>
+
+            <div class="form-group" id="fantasiaGroup" style="display: none;">
+                <label for="fantasia">Nome Fantasia</label>
+                <input type="text" id="fantasia" name="fantasia">
+            </div>
+
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+
+    <script src="./assets_projetos/formulario.js"></script>
+</body>
+</html>
