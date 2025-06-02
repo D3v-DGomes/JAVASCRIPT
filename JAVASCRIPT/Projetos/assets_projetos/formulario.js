@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nomeInput = document.getElementById('nomeInput');
     const razaoSocialGroup = document.getElementById('razaoSocialGroup');
     const emailInput = document.getElementById('email');
-
+    
 
     // Campos obrigatórios:
     const cadastroForm = document.getElementById('cadastroForm');
