@@ -80,5 +80,107 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    // Comportamento das mensagens de campo obrigatório:
+    nomeInput.addEventListener('input', () => {
+        const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
 
+        if (cpfCnpjValue.length <= 11)  // Se for um CPF
+        {
+            nomeInput.value = nomeInput.value.replace(/[^a-zA-Z\sáàâãéèêíìóòôõúùçÁÀÂÃÉÈÊÍÌÓÒÔÕÚÙÇ\s]/g, '');    // Remove números
+        }
+        nomeHelp.style.display = 'none';
+        if (nomeInput.value.trim().length >= 3) {
+            nomeInput.style.border = '';    // Remove a barra vermelha ao digitar mais que 3 caracteres
+        }
+    });
+
+    razaoSocialHelp.addEventListener('input', () => {
+        razaoSocialHelp.style.display = 'none';
+        if (razaoSocialInput.value.trim().length >= 3) {
+            razaoSocialInput.style.border = '';
+        }
+    });
+
+    emailInput.addEventListener('input', () => {
+        emailHelp.style.display = 'none';
+        emailInput.style.border = '';
+    });
+
+
+    // Verificação dos campos obrigatórios no submit:
+    cadastroForm.addEventListener('submit', (event) => {
+        let hasError = false;
+        const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
+        const emailValue = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Validação do CPF/CNPJ:
+        if (!cpfCnpjInput.value.trim()) {
+            cpfCnpjHelp.textContent = 'Campo obrigatório';
+            cpfCnpjHelp.style.display = 'block';
+            cpfCnpjInput.style.border = '1px solid #dc2626';
+            hasError = true;
+        }
+        else if (cpfCnpjValue.length !== 11 && cpfCnpjValue.length !== 14) {
+            cpfCnpjHelp.textContent = 'CPF ou CNPJ inválido';
+            cpfCnpjHelp.style.display = 'block';
+            cpfCnpjInput.style.border = '1px solid #dc2626';
+            hasError = true;
+        }
+        else {
+            cpfCnpjHelp.style.display = 'none';
+            cpfCnpjInput.style.border = '1px solid #22c55e';
+        }
+
+        // Validação do Nome/Fantasia (mínimo 3 caracteres):
+        if (!nomeInput.value.trim()) {
+            nomeHelp.textContent = 'Campo obrigatório';
+            nomeHelp.style.display = 'block';
+            nomeInput.style.border = '1px solid #dc2626';
+            hasError = true;
+        }
+        else if (nomeInput.value.trim().length < 3) {
+            nomeHelp.textContent = 'Digite pelo menos 3 letras';
+            nomeHelp.style.display = 'block';
+            nomeInput.style.border = '1px solid #dc2626';
+            hasError = true;
+        }
+
+        // Validação da Razão Social (se estiver visível: mínimo de 3 caracteres):
+        if (razaoSocialGroup.style.display === 'block') {
+            if (!razaoSocialInput.value.trim()) {
+                razaoSocialHelp.textContent = 'Campo obrigatório';
+                razaoSocialHelp.style.display = 'block';
+                razaoSocialInput.style.border = '1px solid #dc2626';
+                hasError = true;
+            }
+            else if (razaoSocialInput.value.trim().length < 3) {
+                razaoSocialHelp.textContent = 'Digite pelo menos 3 letras';
+                razaoSocialHelp.style.display = 'block';
+                razaoSocialInput.style.border = '1px solid #dc2626';
+                hasError = true;
+            }
+        }
+
+        // Validação do E-mail (só valida se for preenchido):
+        if (emailValue) {
+            if (!emailRegex.test(emailValue)) {
+                emailHelp.textContent = 'Por favor, insira um e-mail válido';
+                emailHelp.style.display = 'block';
+                emailInput.style.border = '1px solid #dc2626';
+                hasError = true;
+            }
+            else {
+                emailHelp.style.display = 'none';   // Manter borda verde se já estiver válida ao perder o foco
+            }
+        }
+        else {
+            emailHelp.style.display = 'none';
+            emailInput.style.border = '';
+        }
+
+        if (hasError) {
+            event.preventDefault();     // Para impedir que o formulário seja enviado com erros
+        }
+    });
 });
