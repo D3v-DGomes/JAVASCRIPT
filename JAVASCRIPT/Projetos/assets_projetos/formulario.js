@@ -39,7 +39,42 @@ document.addEventListener('DOMContentLoaded', () => {
         return cnpjCpf;
     }
 
+    // Campos de CPF/CNPJ e Nome/Fantasia dinâmicos:
+    cpfCnpjInput.addEventListener('input', () => {
+        let value = cpfCnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
 
+        if (value.length > 11) {
+            // Formato CNPJ
+            cpfCnpjLabel.textContent = 'CNPJ *';
+            nomeLabel.textContent = 'Fantasia: *';
+            razaoSocialGroup.style.display = 'block';
+            cpfCnpjInput.value = mascaraCnpjCpf(cpfCnpjInput.value); // Aplica a máscara DEPOIS
+
+            // Borda verde para CNPJ completo:
+            if (value.length === 14) {
+                cpfCnpjInput.style.border = '1px solid #22c55e';
+            }
+            else {
+                cpfCnpjInput.style.border = '';
+            }
+        } else {
+            // Formato CPF
+            cpfCnpjLabel.textContent = 'CPF *';
+            nomeLabel.textContent = 'Nome Completo: *';
+            razaoSocialGroup.style.display = 'none';
+            cpfCnpjInput.value = mascaraCnpjCpf(cpfCnpjInput.value); // Aplica a máscara DEPOIS
+            cpfCnpjInput.placeholder = 'CPF/CNPJ'; // Mantém o placeholder genérico ou atualiza para CPF
+
+            // Borda verde para CPF completo:
+            if (value.length === 11) {
+                cpfCnpjInput.style.border = '1px solid #22c55e';
+            }
+            else {
+                cpfCnpjInput.style.border = '';
+            }
+        }
+        cpfCnpjHelp.style.display = 'none';     // Oculta a mensagem ao digitar
+    });
 
 
 
