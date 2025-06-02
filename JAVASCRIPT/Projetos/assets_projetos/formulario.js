@@ -77,7 +77,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // Remover a cor da borda se clicar fora do campo:
+    cpfCnpjInput.addEventListener('blur', () => {
+        resetInputBorder(cpfCnpjInput);
+    });
 
+    emailInput.addEventListener('blur', () => {
+        const emailValue = emailInput.value.trim();
+
+        if (emailValue) {
+            // Expressão regular para validar formato de e-mail:
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(emailValue)) {
+                emailHelp.style.display = 'block';
+                emailInput.style.border = '1px solid #dc2626';
+            }
+            else {
+                emailHelp.style.display = 'none';
+                emailInput.style.border = '1px solid #22c55e';
+            }
+        }
+        else {
+            emailHelp.style.display = 'none';
+            emailInput.style.border = '';
+        }
+    });
+
+    nomeInput.addEventListener('blur', () => {
+        if (nomeInput.value.trim().length < 3 && nomeInput.value.trim() !== '') {
+            nomeHelp.textContent = 'Digite pelo menos 3 letras';
+            nomeHelp.style.display = 'block';
+            nomeInput.style.border = '1px solid #dc2626';
+        }
+        else if (nomeInput.value.trim().length >= 3) {
+            nomeInput.style.border = '1px solid #22c55e';
+            nomeHelp.style.display = 'none';
+        }
+        else {
+            resetInputBorder(nomeInput);    // Se o campo estiver vazio ao perder o foco
+            nomeHelp.style.display = 'none';
+        }
+    });
+
+    razaoSocialInput.addEventListener('blur', () => {
+        if (razaoSocialInput.value.trim().length < 3 && razaoSocialInput.value.trim() !== '') {
+            razaoSocialHelp.textContent = 'Digite pelo menos 3 letras';
+            razaoSocialHelp.style.display = 'block';
+            razaoSocialInput.style.border = '1px solid #dc2626';
+        }
+        else if (razaoSocialInput.value.trim().length >= 3) {
+            razaoSocialInput.style.border = '1px solid #22c55e';
+            razaoSocialHelp.style.display = 'none';
+        }
+        else {
+            resetInputBorder(razaoSocialInput);
+            razaoSocialHelp.style.display = 'none';
+        }
+    });
 
 
     // Comportamento das mensagens de campo obrigatório:
