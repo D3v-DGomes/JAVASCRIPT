@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const razaoSocialInput = document.getElementById('razaoSocialInput');
     const emailHelp = document.getElementById('emailHelp');
 
-
+    // Resetando as cores das bordas:
+    const resetInputBorder = (inputElement) => {
+        inputElement.style.border = '';
+    }
 
     // Máscara do CPF/CNPJ:
     function mascaraCnpjCpf(valor) { // Agora recebe o valor como argumento
