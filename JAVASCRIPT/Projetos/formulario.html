@@ -13,48 +13,36 @@
         <h1>Cadastro</h1>
         <form id="cadastroForm">
             <div class="form-group" id="cpfCnpjGroup">
-                <label class="form-label" for="cpfCnpj">CPF</label>
-                <div class="input-field">
-                    <input type="text" id="cpfCnpj" name="cpfCnpj" placeholder="000.000.000-00">
-                    <i class="fa-regular fa-user"></i>
+                <label class="form-label" for="cpfCnpj">CPF/CNPJ:<span style="color:red;"> *</span></label>
+                <input type="text" id="cpfCnpj" name="cpfCnpj" aria-describedby="cpfCnpjHelp" placeholder="___.___.___-__">
+                <div id="cpfCnpjHelp" class="text-danger" style="font-size: small; display: none;">Campo obrigatório
                 </div>
-                <span class="error"></span>
             </div>
 
             <div class="form-group" id="nomeGroup">
-                <label class="form-label" for="nome">Nome Completo</label>
-                <div class="input-field">
-                    <input type="text" id="nome" name="nome">
-                    <i class="fa-regular fa-user"></i>
-                </div>
-                <span class="error"></span>
+                <label class="form-label" for="nome" id="nomeLabel">Nome Completo:<span
+                        style="color:red;"> *</span></label>
+                <input type="text" id="nomeInput" name="nome" aria-describedby="nomeHelp">
+                <div class="text-danger" id="nomeHelp" style="font-size: small; display: none;">Campo obrigatório</div>
             </div>
 
             <div class="form-group" id="razaoSocialGroup" style="display: none;">
-                <label class="form-label" for="razaoSocial">Razão Social</label>
-                <div class="input-field">
-                    <input type="text" id="razaoSocial" name="razaoSocial">
-                    <i class="fa-regular fa-user"></i>
+                <label class="form-label" for="razaoSocial">Razão Social <span style="color:red;"> *</span></label>
+                <input type="text" id="razaoSocialInput" name="razaoSocial" aria-describedby="razaoHelpInput">
+                <div class="text-danger" id="razaoSocialHelp" style="font-size: small; display: none;">Campo obrigatório
                 </div>
-                <span class="error"></span>
             </div>
 
-            <div class="form-group" id="fantasiaGroup" style="display: none;">
-                <label class="form-label" for="fantasia">Nome Fantasia</label>
-                <div class="input-field">
-                    <input type="text" id="fantasia" name="fantasia">
-                    <i class="fa-regular fa-user"></i>
-                </div>
-                <span class="error"></span>
+            <div class="form-group" id="emailGroup">
+                <label class="form-label" for="email">E-mail:</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="seu@email.com">
+                <div id="emailHelp" class="form-text text-danger" style="font-size: small; display: none;">Por favor,
+                    insira um e-mail válido.</div>
             </div>
 
             <div class="form-group" id="passwordGroup">
                 <label class="form-label" for="senha">Senha:</label>
-                <div class="input-field">
-                    <input type="password" id="password" name="password">
-                    <i class="fa-regular fa-user"></i>
-                </div>
-                <span class="error"></span>
+                <input type="password" id="password" name="password">
             </div>
 
             <button type="submit">Cadastrar</button>
