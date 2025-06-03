@@ -318,23 +318,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const senhaValue = passwordInput.value;
         const senhaValida = atualizarFeedbackRequisitos(senhaValue); // Garante que o feedback visual esteja atualizado
 
-        if (!senhaValida) {
+        if (senhaValue.length === 0) {
+            senhaHelp.textContent = 'Campo obrigatório';
+            senhaHelp.style.display = 'block';
             passwordInput.style.border = '1px solid #dc2626';
-            if (senhaValue.length === 0) {
-                senhaHelp.textContent = 'Campo obrigatório';
-                senhaHelp.style.display = 'block';
-            } else {
-                senhaHelp.textContent = 'Senha não atende a todos os requisitos.'; // Mensagem mais genérica para senha inválida
-                senhaHelp.style.display = 'block';
-            }
+            hasError = true;
+        } else if (!senhaValida) {
+            passwordInput.style.border = '1px solid #dc2626';
+            senhaHelp.textContent = 'Senha não atende a todos os requisitos.';
+            senhaHelp.style.display = 'block';
             hasError = true;
         } else {
             senhaHelp.style.display = 'none';
             passwordInput.style.border = '1px solid #22c55e';
         }
 
-        if (hasError) {
-            event.preventDefault(); // Impede que o formulário seja enviado com erros
+        if (!hasError) {
+            alert('Formulário enviado com sucesso!');
         }
     });
 });
