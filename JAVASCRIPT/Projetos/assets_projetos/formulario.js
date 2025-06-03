@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const nomeInput = document.getElementById('nomeInput');
     const razaoSocialGroup = document.getElementById('razaoSocialGroup');
     const emailInput = document.getElementById('email');
-    
+
 
     // Campos obrigatórios:
     const cadastroForm = document.getElementById('cadastroForm');
@@ -15,6 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const razaoSocialHelp = document.getElementById('razaoSocialHelp');
     const razaoSocialInput = document.getElementById('razaoSocialInput');
     const emailHelp = document.getElementById('emailHelp');
+    const passwordInput = document.getElementById('password');
+    const senhaHelp = document.getElementById('senhaHelp');
+
+    // Função para validar a senha:
+    function validarSenha(senha) {
+        if (!senha) {
+            return { valido: false, mensagem: 'Campo obrigatório' };
+        }
+        if (senha.length < 8) {
+            return { valido: false, mensagem: 'A senha deve conter no mínimo 8 caracteres' };
+        }
+        if (!/[A-Z]/.test(senha)) {
+            return { valido: false, mensagem: 'A senha deve conter pelo menos uma letra maiúscula' };
+        }
+        if (!/[^a-zA-Z0-9\s]/.test(senha)) {
+            return { valido: false, mensagem: 'A senha deve conter pelo menos um caractere especial' };
+        }
+        return { valido: true, mensagem: '' };
+    }
 
     // Resetando as cores das bordas:
     const resetInputBorder = (inputElement) => {
@@ -140,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // Comportamento das mensagens de campo obrigatório:
+    // Limpar mensagens de erro e borda ao digitar:
     nomeInput.addEventListener('input', () => {
         const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
 
@@ -170,11 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Verificação dos campos obrigatórios no submit:
     cadastroForm.addEventListener('submit', (event) => {
         let hasError = false;
-        const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
-        const emailValue = emailInput.value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         // Validação do CPF/CNPJ:
+        const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
+
         if (!cpfCnpjInput.value.trim()) {
             cpfCnpjHelp.textContent = 'Campo obrigatório';
             cpfCnpjHelp.style.display = 'block';
@@ -223,6 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Validação do E-mail (só valida se for preenchido):
+        const emailValue = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (emailValue) {
             if (!emailRegex.test(emailValue)) {
                 emailHelp.textContent = 'Por favor, insira um e-mail válido';

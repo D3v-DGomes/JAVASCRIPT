@@ -14,14 +14,15 @@
         <form id="cadastroForm">
             <div class="form-group" id="cpfCnpjGroup">
                 <label class="form-label" for="cpfCnpj">CPF/CNPJ:<span style="color:red;"> *</span></label>
-                <input type="text" id="cpfCnpj" name="cpfCnpj" aria-describedby="cpfCnpjHelp" placeholder="___.___.___-__">
+                <input type="text" id="cpfCnpj" name="cpfCnpj" aria-describedby="cpfCnpjHelp"
+                    placeholder="___.___.___-__">
                 <div id="cpfCnpjHelp" class="text-danger" style="font-size: small; display: none;">Campo obrigatório
                 </div>
             </div>
 
             <div class="form-group" id="nomeGroup">
-                <label class="form-label" for="nome" id="nomeLabel">Nome Completo:<span
-                        style="color:red;"> *</span></label>
+                <label class="form-label" for="nome" id="nomeLabel">Nome Completo:<span style="color:red;">
+                        *</span></label>
                 <input type="text" id="nomeInput" name="nome" aria-describedby="nomeHelp">
                 <div class="text-danger" id="nomeHelp" style="font-size: small; display: none;">Campo obrigatório</div>
             </div>
@@ -43,6 +44,8 @@
             <div class="form-group" id="passwordGroup">
                 <label class="form-label" for="senha">Senha:</label>
                 <input type="password" id="password" name="password">
+                <div class="text-danger" id="senhaHelp" style="font-size: small; display: none;">Campo obrigatório
+                </div>
             </div>
 
             <button type="submit">Cadastrar</button>
