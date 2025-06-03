@@ -201,6 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
         emailInput.style.border = '';
     });
 
+    passwordInput.addEventListener('input', () => {
+        senhaHelp.style.display = 'none';
+        passwordInput.style.border = '';
+    });
+
+
 
     // Verificação dos campos obrigatórios no submit:
     cadastroForm.addEventListener('submit', (event) => {
