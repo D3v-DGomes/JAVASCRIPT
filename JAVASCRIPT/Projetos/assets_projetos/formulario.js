@@ -96,8 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
             nomeLabel.textContent = 'Nome Completo: *';
             razaoSocialGroup.style.display = 'none';
         }
-        cpfCnpjHelp.style.display = 'none'; // Oculta a mensagem ao digitar
-        resetInputBorder(cpfCnpjInput); // Remove borda ao digitar
+
+        if (cpfCnpjHelp.style.display === 'block' && cpfCnpjInput.style.border.includes('rgb(220, 38, 38)')) {
+            // Não faz nada, deixa o erro persistir até que o usuário insira algo válido
+        } else {
+            cpfCnpjHelp.style.display = 'none'; // Oculta a mensagem ao digitar
+            resetInputBorder(cpfCnpjInput); // Remove borda ao digitar
+        }
+
     });
 
     cpfCnpjInput.addEventListener('blur', () => {
@@ -121,8 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cpfCnpjValue.length <= 11) { // Se for um CPF
             nomeInput.value = nomeInput.value.replace(/[^a-zA-Z\sáàâãéèêíìóòôõúùçÁÀÂÃÉÈÊÍÌÓÒÔÕÚÙÇ\s]/g, ''); // Remove números
         }
-        nomeHelp.style.display = 'none'; // Oculta a mensagem ao digitar
-        resetInputBorder(nomeInput); // Remove borda ao digitar
+
+        if (nomeHelp.style.display === 'block' && nomeInput.style.border.includes('rgb(220, 38, 38)')) {
+            // Não faz nada
+        } else {
+            nomeHelp.style.display = 'none'; // Oculta a mensagem ao digitar
+            resetInputBorder(nomeInput); // Remove borda ao digitar
+        }
     });
 
     nomeInput.addEventListener('blur', () => {
@@ -142,8 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Razão Social
     razaoSocialInput.addEventListener('input', () => {
-        razaoSocialHelp.style.display = 'none';
-        resetInputBorder(razaoSocialInput); // Remove borda ao digitar
+        if (razaoSocialHelp.style.display === 'block' && razaoSocialInput.style.border.includes('rgb(220, 38, 38)')) {
+            // Não faz nada
+        } else {
+            razaoSocialHelp.style.display = 'none';
+            resetInputBorder(razaoSocialInput);
+        }
     });
 
     razaoSocialInput.addEventListener('blur', () => {
@@ -163,8 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // E-mail
     emailInput.addEventListener('input', () => {
-        emailHelp.style.display = 'none';
-        resetInputBorder(emailInput); // Remove borda ao digitar
+        if (emailHelp.style.display === 'block' && emailInput.style.border.includes('rgb(220, 38, 38)')) {
+            // Não faz nada
+        } else {
+            emailHelp.style.display = 'none';
+            resetInputBorder(emailInput);
+        }
     });
 
     emailInput.addEventListener('blur', () => {
@@ -191,32 +210,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const senhaValue = passwordInput.value;
         const senhaValida = atualizarFeedbackRequisitos(senhaValue); // Atualiza os requisitos visuais
 
-        senhaHelp.style.display = 'none'; // Sempre oculta a mensagem de erro geral ao digitar
-        if (senhaValida) {
-            passwordInput.style.border = '1px solid #22c55e';
+        if (senhaHelp.style.display === 'block' && passwordInput.style.border.includes('rgb(220, 38, 38)')) {
+            // Não faz nada
         } else {
-            resetInputBorder(passwordInput); // Remove a borda se não for válida enquanto digita
+            senhaHelp.style.display = 'none';
+            if (senhaValida) {
+                passwordInput.style.border = '1px solid #22c55e';
+            } else {
+                resetInputBorder(passwordInput);
+            }
         }
     });
 
     passwordInput.addEventListener('blur', () => {
         const senhaValue = passwordInput.value;
-        const senhaValida = atualizarFeedbackRequisitos(senhaValue); // Garante que o feedback esteja atualizado
-
-        if (!senhaValida && senhaValue.length > 0) {
+        if (senhaValue.length === 0) { // Se o campo estiver vazio ao perder o foco
+            senhaHelp.textContent = 'Campo obrigatório';
+            senhaHelp.style.display = 'block';
             passwordInput.style.border = '1px solid #dc2626';
-            // Se precisar de uma mensagem de erro geral para a senha inválida, adicione aqui
-        } else if (senhaValida) {
-            passwordInput.style.border = '1px solid #22c55e';
-        } else { // Se o campo estiver vazio ao sair
-            resetInputBorder(passwordInput);
-            senhaHelp.style.display = 'none';
+        } else {
+            const senhaValida = atualizarFeedbackRequisitos(senhaValue);
+            if (!senhaValida) {
+                passwordInput.style.border = '1px solid #dc2626';
+                senhaHelp.textContent = 'Senha não atende a todos os requisitos.';
+                senhaHelp.style.display = 'block';
+            } else {
+                senhaHelp.style.display = 'none';
+                passwordInput.style.border = '1px solid #22c55e';
+            }
         }
     });
 
 
     // --- Verificação Final dos campos obrigatórios no submit ---
     cadastroForm.addEventListener('submit', (event) => {
+        event.preventDefault();
         let hasError = false;
 
         // Validação do CPF/CNPJ:
