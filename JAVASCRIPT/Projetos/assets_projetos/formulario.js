@@ -335,6 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!hasError) {
             alert('Formulário enviado com sucesso!');
+            cadastroForm.submit();
         }
     });
 });
