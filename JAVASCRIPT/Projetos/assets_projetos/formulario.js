@@ -158,6 +158,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    passwordInput.addEventListener('blur', () => {
+        const senhaValue = passwordInput.value;
+        const senhaValidacao = validarSenha(senhaValue);
+
+        if (!senhaValidacao.valido) {
+            senhaHelp.textContent = senhaValidacao.mensagem;
+            senhaHelp.style.display = 'block';
+            passwordInput.style.border = '1px solid #dc2626';
+        }
+        else {
+            senhaHelp.style.display = 'none';
+            passwordInput.style.border = '1px solid #22c55e';
+        }
+    });
+
+
 
     // Limpar mensagens de erro e borda ao digitar:
     nomeInput.addEventListener('input', () => {
