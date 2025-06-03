@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const razaoSocialGroup = document.getElementById('razaoSocialGroup');
     const emailInput = document.getElementById('email');
 
-
     // Campos obrigatórios:
     const cadastroForm = document.getElementById('cadastroForm');
     const cpfCnpjHelp = document.getElementById('cpfCnpjHelp');
@@ -18,21 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const senhaHelp = document.getElementById('senhaHelp');
 
-    // Função para validar a senha:
-    function validarSenha(senha) {
-        if (!senha) {
-            return { valido: false, mensagem: 'Campo obrigatório' };
-        }
-        if (senha.length < 8) {
-            return { valido: false, mensagem: 'A senha deve conter no mínimo 8 caracteres' };
-        }
-        if (!/[A-Z]/.test(senha)) {
-            return { valido: false, mensagem: 'A senha deve conter pelo menos uma letra maiúscula' };
-        }
-        if (!/[^a-zA-Z0-9\s]/.test(senha)) {
-            return { valido: false, mensagem: 'A senha deve conter pelo menos um caractere especial' };
-        }
-        return { valido: true, mensagem: '' };
+    //Requisitos para a criação da senha:
+    const passwordLength = document.getElementById('passwordLength');
+    const passwordUppercase = document.getElementById('passwordUppercase');
+    const passwordSpecial = document.getElementById('passwordSpecial');
+
+    // Função para validar a senha e retornar status dos requisitos:
+    const requisitos = {
+        length: senha.length >= 8,      // Senha maior ou igual a 8 caracteres
+        uppercase: /[A-Z]/.test(senha),     // Letras maiúsculas
+        special: /[â-zA-Z0-9]/.test(senha)      // Qualquer caractere que não seja letra ou número
     }
 
     // Resetando as cores das bordas:
