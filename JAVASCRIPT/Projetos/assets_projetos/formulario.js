@@ -189,16 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     passwordInput.addEventListener('blur', () => {
         const senhaValue = passwordInput.value;
-        const senhaValidacao = validarSenha(senhaValue);
+        const senhaValida = atualizarFeedbackRequisitos(senhaValue);
 
-        if (!senhaValidacao.valido) {
-            senhaHelp.textContent = senhaValidacao.mensagem;
-            senhaHelp.style.display = 'block';
+        if (!senhaValida && senhaValue.length > 0) {
             passwordInput.style.border = '1px solid #dc2626';
-        }
-        else {
-            senhaHelp.style.display = 'none';
+        } else if (senhaValida) {
             passwordInput.style.border = '1px solid #22c55e';
+        } else {
+            resetInputBorder(passwordInput);
+            senhaHelp.style.display = 'none';
         }
     });
 
@@ -230,9 +229,16 @@ document.addEventListener('DOMContentLoaded', () => {
         emailInput.style.border = '';
     });
 
-    passwordInput.addEventListener('input', () => {
+    passwordInput.addEventListener('input', () => {     // Validação em tempo real
+        const senhaValue = passwordInput.value;
+        const senhaValida = atualizarFeedbackRequisitos(senhaValue);
+
         senhaHelp.style.display = 'none';
-        passwordInput.style.border = '';
+        if (senhaValida) {
+            passwordInput.style.border = '1px solid #22c55e';
+        } else {
+            passwordInput.style.border = '';
+        }
     });
 
 
