@@ -44,6 +44,11 @@
             <div class="form-group" id="passwordGroup">
                 <label class="form-label" for="senha">Senha:</label>
                 <input type="password" id="password" name="password">
+                <div id="passwordRequirements" style="font-size: small; margin-top: 5px;">
+                    <p id="passwordLength" class="text-danger">Mínimo de 8 caracteres</p>
+                    <p id="passwordUppercase" class="text-danger">Pelo menos 1 letra maiúscula</p>
+                    <p id="passowrdSpecial" class="text-danger">Pelo menos 1 caractere especial (!@#$%&*)</p>
+                </div>
                 <div class="text-danger" id="senhaHelp" style="font-size: small; display: none;">Campo obrigatório
                 </div>
             </div>
