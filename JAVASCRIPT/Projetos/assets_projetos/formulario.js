@@ -29,6 +29,41 @@ document.addEventListener('DOMContentLoaded', () => {
         special: /[â-zA-Z0-9]/.test(senha)      // Qualquer caractere que não seja letra ou número
     }
 
+    // Função para atualizar o feedback visual dos requisitos:
+    function atualizarFeedbackRequisitos(senha) {
+        const requisitosAtendidos = verificarRequisitosSenha(senha);
+
+        // Caracteres maior ou igual a 8:
+        if (requisitosAtendidos.length) {
+            passwordLength.classList.remove('text-danger');
+            passwordLength.style.color = '#22c55e';     // Requisito fica verde
+        } else {
+            passwordLength.classList.add('text-danger');
+            passwordLength.style.color = '';    // Requisito volta ao vermelho
+        }
+
+        // Pelo menos 1 letra maiúscula:
+        if (requisitosAtendidos.uppercase) {
+            passwordUppercase.classList.remove('text-danger');
+            passwordUppercase.style.color = '#22c55e';
+        } else {
+            passwordUppercase.classList.add('text-danger');
+            passwordUppercase.style.color = '';
+        }
+
+        // Pelo menos 1 caractere especial:
+        if (requisitosAtendidos.special) {
+            passwordSpecial.classList.remove('text-danger');
+            passwordSpecial.style.color = '#22c55e';
+        } else {
+            passwordSpecial.classList.add('text-danger');
+            passwordSpecial.style.color = '';
+        }
+
+        // Determinando se a senha é válida com todos os requisitos cumpridos:
+        return requisitosAtendidos.length && requisitosAtendidos.uppercase && requisitosAtendidos.special;
+    }
+
     // Resetando as cores das bordas:
     const resetInputBorder = (inputElement) => {
         inputElement.style.border = '';
