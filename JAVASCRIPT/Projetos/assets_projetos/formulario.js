@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const razaoSocialGroup = document.getElementById('razaoSocialGroup');
     const emailInput = document.getElementById('email');
 
-    // Campos obrigatórios:
+    // Campos de ajuda (mensagens de erro) e inputs obrigatórios:
     const cadastroForm = document.getElementById('cadastroForm');
     const cpfCnpjHelp = document.getElementById('cpfCnpjHelp');
     const nomeHelp = document.getElementById('nomeHelp');
@@ -17,60 +17,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const senhaHelp = document.getElementById('senhaHelp');
 
-    //Requisitos para a criação da senha:
+    // Requisitos para a criação da senha:
     const passwordLength = document.getElementById('passwordLength');
     const passwordUppercase = document.getElementById('passwordUppercase');
     const passwordSpecial = document.getElementById('passwordSpecial');
 
-    // Função para validar a senha e retornar status dos requisitos:
-    const requisitos = {
-        length: senha.length >= 8,      // Senha maior ou igual a 8 caracteres
-        uppercase: /[A-Z]/.test(senha),     // Letras maiúsculas
-        special: /[â-zA-Z0-9]/.test(senha)      // Qualquer caractere que não seja letra ou número
+    // Função para verificar os requisitos da senha e retornar o status de cada um:
+    function verificarRequisitosSenha(senha) {
+        return {
+            length: senha.length >= 8, // Senha maior ou igual a 8 caracteres
+            uppercase: /[A-Z]/.test(senha), // Pelo menos 1 letra maiúscula
+            special: /[^a-zA-Z0-9]/.test(senha) // Pelo menos 1 caractere que não seja letra ou número
+        };
     }
 
-    // Função para atualizar o feedback visual dos requisitos:
+    // Função para atualizar o feedback visual dos requisitos da senha:
     function atualizarFeedbackRequisitos(senha) {
         const requisitosAtendidos = verificarRequisitosSenha(senha);
 
-        // Caracteres maior ou igual a 8:
-        if (requisitosAtendidos.length) {
-            passwordLength.classList.remove('text-danger');
-            passwordLength.style.color = '#22c55e';     // Requisito fica verde
-        } else {
-            passwordLength.classList.add('text-danger');
-            passwordLength.style.color = '';    // Requisito volta ao vermelho
-        }
+        // Funções auxiliares para aplicar estilos
+        const applyStyle = (element, condition) => {
+            if (condition) {
+                element.classList.remove('text-danger');
+                element.style.color = '#22c55e'; // Verde
+            } else {
+                element.classList.add('text-danger');
+                element.style.color = ''; // Volta ao padrão da classe ou ao vermelho
+            }
+        };
 
-        // Pelo menos 1 letra maiúscula:
-        if (requisitosAtendidos.uppercase) {
-            passwordUppercase.classList.remove('text-danger');
-            passwordUppercase.style.color = '#22c55e';
-        } else {
-            passwordUppercase.classList.add('text-danger');
-            passwordUppercase.style.color = '';
-        }
+        applyStyle(passwordLength, requisitosAtendidos.length);
+        applyStyle(passwordUppercase, requisitosAtendidos.uppercase);
+        applyStyle(passwordSpecial, requisitosAtendidos.special);
 
-        // Pelo menos 1 caractere especial:
-        if (requisitosAtendidos.special) {
-            passwordSpecial.classList.remove('text-danger');
-            passwordSpecial.style.color = '#22c55e';
-        } else {
-            passwordSpecial.classList.add('text-danger');
-            passwordSpecial.style.color = '';
-        }
-
-        // Determinando se a senha é válida com todos os requisitos cumpridos:
+        // Determina se a senha é totalmente válida com base em todos os requisitos:
         return requisitosAtendidos.length && requisitosAtendidos.uppercase && requisitosAtendidos.special;
     }
 
-    // Resetando as cores das bordas:
+    // Resetando as cores das bordas (agora como função genérica):
     const resetInputBorder = (inputElement) => {
         inputElement.style.border = '';
-    }
+    };
 
     // Máscara do CPF/CNPJ:
-    function mascaraCnpjCpf(valor) { // Agora recebe o valor como argumento
+    function mascaraCnpjCpf(valor) {
         let cnpjCpf = valor.replace(/\D/g, '');
 
         if (cnpjCpf.length > 14) {
@@ -90,250 +80,233 @@ document.addEventListener('DOMContentLoaded', () => {
         return cnpjCpf;
     }
 
-    // Campos de CPF/CNPJ e Nome/Fantasia dinâmicos:
+    // --- Event Listeners para feedback em tempo real e validação no 'blur' ---
+
+    // CPF/CNPJ
     cpfCnpjInput.addEventListener('input', () => {
-        let value = cpfCnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        let value = cpfCnpjInput.value.replace(/\D/g, '');
+        cpfCnpjInput.value = mascaraCnpjCpf(cpfCnpjInput.value); // Aplica a máscara
 
         if (value.length > 11) {
-            // Formato CNPJ
             cpfCnpjLabel.textContent = 'CNPJ *';
             nomeLabel.textContent = 'Fantasia: *';
             razaoSocialGroup.style.display = 'block';
-            cpfCnpjInput.value = mascaraCnpjCpf(cpfCnpjInput.value); // Aplica a máscara DEPOIS
-
-            // Borda verde para CNPJ completo:
-            if (value.length === 14) {
-                cpfCnpjInput.style.border = '1px solid #22c55e';
-            }
-            else {
-                cpfCnpjInput.style.border = '';
-            }
         } else {
-            // Formato CPF
             cpfCnpjLabel.textContent = 'CPF *';
             nomeLabel.textContent = 'Nome Completo: *';
             razaoSocialGroup.style.display = 'none';
-            cpfCnpjInput.value = mascaraCnpjCpf(cpfCnpjInput.value); // Aplica a máscara DEPOIS
-            cpfCnpjInput.placeholder = 'CPF/CNPJ'; // Mantém o placeholder genérico ou atualiza para CPF
-
-            // Borda verde para CPF completo:
-            if (value.length === 11) {
-                cpfCnpjInput.style.border = '1px solid #22c55e';
-            }
-            else {
-                cpfCnpjInput.style.border = '';
-            }
         }
-        cpfCnpjHelp.style.display = 'none';     // Oculta a mensagem ao digitar
+        cpfCnpjHelp.style.display = 'none'; // Oculta a mensagem ao digitar
+        resetInputBorder(cpfCnpjInput); // Remove borda ao digitar
     });
 
-
-    // Remover a cor da borda se clicar fora do campo:
     cpfCnpjInput.addEventListener('blur', () => {
-        resetInputBorder(cpfCnpjInput);
+        const value = cpfCnpjInput.value.replace(/\D/g, '');
+        if (value.length === 11 || value.length === 14) {
+            cpfCnpjInput.style.border = '1px solid #22c55e'; // Borda verde se CPF/CNPJ válido
+            cpfCnpjHelp.style.display = 'none';
+        } else if (value.length > 0) {
+            cpfCnpjInput.style.border = '1px solid #dc2626';
+            cpfCnpjHelp.textContent = 'CPF ou CNPJ inválido';
+            cpfCnpjHelp.style.display = 'block';
+        } else {
+            resetInputBorder(cpfCnpjInput);
+            cpfCnpjHelp.style.display = 'none';
+        }
+    });
+
+    // Nome Completo/Fantasia
+    nomeInput.addEventListener('input', () => {
+        const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
+        if (cpfCnpjValue.length <= 11) { // Se for um CPF
+            nomeInput.value = nomeInput.value.replace(/[^a-zA-Z\sáàâãéèêíìóòôõúùçÁÀÂÃÉÈÊÍÌÓÒÔÕÚÙÇ\s]/g, ''); // Remove números
+        }
+        nomeHelp.style.display = 'none'; // Oculta a mensagem ao digitar
+        resetInputBorder(nomeInput); // Remove borda ao digitar
+    });
+
+    nomeInput.addEventListener('blur', () => {
+        const nomeValue = nomeInput.value.trim();
+        if (nomeValue.length === 0) {
+            resetInputBorder(nomeInput); // Se o campo estiver vazio ao perder o foco, remover borda
+            nomeHelp.style.display = 'none';
+        } else if (nomeValue.length < 3) {
+            nomeHelp.textContent = 'Digite pelo menos 3 letras';
+            nomeHelp.style.display = 'block';
+            nomeInput.style.border = '1px solid #dc2626';
+        } else {
+            nomeInput.style.border = '1px solid #22c55e';
+            nomeHelp.style.display = 'none';
+        }
+    });
+
+    // Razão Social
+    razaoSocialInput.addEventListener('input', () => {
+        razaoSocialHelp.style.display = 'none';
+        resetInputBorder(razaoSocialInput); // Remove borda ao digitar
+    });
+
+    razaoSocialInput.addEventListener('blur', () => {
+        const razaoSocialValue = razaoSocialInput.value.trim();
+        if (razaoSocialValue.length === 0) {
+            resetInputBorder(razaoSocialInput);
+            razaoSocialHelp.style.display = 'none';
+        } else if (razaoSocialValue.length < 3) {
+            razaoSocialHelp.textContent = 'Digite pelo menos 3 letras';
+            razaoSocialHelp.style.display = 'block';
+            razaoSocialInput.style.border = '1px solid #dc2626';
+        } else {
+            razaoSocialInput.style.border = '1px solid #22c55e';
+            razaoSocialHelp.style.display = 'none';
+        }
+    });
+
+    // E-mail
+    emailInput.addEventListener('input', () => {
+        emailHelp.style.display = 'none';
+        resetInputBorder(emailInput); // Remove borda ao digitar
     });
 
     emailInput.addEventListener('blur', () => {
         const emailValue = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (emailValue) {
-            // Expressão regular para validar formato de e-mail:
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
             if (!emailRegex.test(emailValue)) {
+                emailHelp.textContent = 'Por favor, insira um e-mail válido.';
                 emailHelp.style.display = 'block';
                 emailInput.style.border = '1px solid #dc2626';
-            }
-            else {
+            } else {
                 emailHelp.style.display = 'none';
                 emailInput.style.border = '1px solid #22c55e';
             }
-        }
-        else {
+        } else {
+            resetInputBorder(emailInput);
             emailHelp.style.display = 'none';
-            emailInput.style.border = '';
         }
     });
 
-    nomeInput.addEventListener('blur', () => {
-        if (nomeInput.value.trim().length < 3 && nomeInput.value.trim() !== '') {
-            nomeHelp.textContent = 'Digite pelo menos 3 letras';
-            nomeHelp.style.display = 'block';
-            nomeInput.style.border = '1px solid #dc2626';
-        }
-        else if (nomeInput.value.trim().length >= 3) {
-            nomeInput.style.border = '1px solid #22c55e';
-            nomeHelp.style.display = 'none';
-        }
-        else {
-            resetInputBorder(nomeInput);    // Se o campo estiver vazio ao perder o foco
-            nomeHelp.style.display = 'none';
-        }
-    });
+    // Senha
+    passwordInput.addEventListener('input', () => {
+        const senhaValue = passwordInput.value;
+        const senhaValida = atualizarFeedbackRequisitos(senhaValue); // Atualiza os requisitos visuais
 
-    razaoSocialInput.addEventListener('blur', () => {
-        if (razaoSocialInput.value.trim().length < 3 && razaoSocialInput.value.trim() !== '') {
-            razaoSocialHelp.textContent = 'Digite pelo menos 3 letras';
-            razaoSocialHelp.style.display = 'block';
-            razaoSocialInput.style.border = '1px solid #dc2626';
-        }
-        else if (razaoSocialInput.value.trim().length >= 3) {
-            razaoSocialInput.style.border = '1px solid #22c55e';
-            razaoSocialHelp.style.display = 'none';
-        }
-        else {
-            resetInputBorder(razaoSocialInput);
-            razaoSocialHelp.style.display = 'none';
+        senhaHelp.style.display = 'none'; // Sempre oculta a mensagem de erro geral ao digitar
+        if (senhaValida) {
+            passwordInput.style.border = '1px solid #22c55e';
+        } else {
+            resetInputBorder(passwordInput); // Remove a borda se não for válida enquanto digita
         }
     });
 
     passwordInput.addEventListener('blur', () => {
         const senhaValue = passwordInput.value;
-        const senhaValida = atualizarFeedbackRequisitos(senhaValue);
+        const senhaValida = atualizarFeedbackRequisitos(senhaValue); // Garante que o feedback esteja atualizado
 
         if (!senhaValida && senhaValue.length > 0) {
             passwordInput.style.border = '1px solid #dc2626';
+            // Se precisar de uma mensagem de erro geral para a senha inválida, adicione aqui
         } else if (senhaValida) {
             passwordInput.style.border = '1px solid #22c55e';
-        } else {
+        } else { // Se o campo estiver vazio ao sair
             resetInputBorder(passwordInput);
             senhaHelp.style.display = 'none';
         }
     });
 
 
-
-    // Limpar mensagens de erro e borda ao digitar:
-    nomeInput.addEventListener('input', () => {
-        const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
-
-        if (cpfCnpjValue.length <= 11)  // Se for um CPF
-        {
-            nomeInput.value = nomeInput.value.replace(/[^a-zA-Z\sáàâãéèêíìóòôõúùçÁÀÂÃÉÈÊÍÌÓÒÔÕÚÙÇ\s]/g, '');    // Remove números
-        }
-        nomeHelp.style.display = 'none';
-        if (nomeInput.value.trim().length >= 3) {
-            nomeInput.style.border = '';    // Remove a barra vermelha ao digitar mais que 3 caracteres
-        }
-    });
-
-    razaoSocialHelp.addEventListener('input', () => {
-        razaoSocialHelp.style.display = 'none';
-        if (razaoSocialInput.value.trim().length >= 3) {
-            razaoSocialInput.style.border = '';
-        }
-    });
-
-    emailInput.addEventListener('input', () => {
-        emailHelp.style.display = 'none';
-        emailInput.style.border = '';
-    });
-
-    passwordInput.addEventListener('input', () => {     // Validação em tempo real
-        const senhaValue = passwordInput.value;
-        const senhaValida = atualizarFeedbackRequisitos(senhaValue);
-
-        senhaHelp.style.display = 'none';
-        if (senhaValida) {
-            passwordInput.style.border = '1px solid #22c55e';
-        } else {
-            passwordInput.style.border = '';
-        }
-    });
-
-
-
-    // Verificação dos campos obrigatórios no submit:
+    // --- Verificação Final dos campos obrigatórios no submit ---
     cadastroForm.addEventListener('submit', (event) => {
         let hasError = false;
 
         // Validação do CPF/CNPJ:
         const cpfCnpjValue = cpfCnpjInput.value.replace(/\D/g, '');
-
         if (!cpfCnpjInput.value.trim()) {
             cpfCnpjHelp.textContent = 'Campo obrigatório';
             cpfCnpjHelp.style.display = 'block';
             cpfCnpjInput.style.border = '1px solid #dc2626';
             hasError = true;
-        }
-        else if (cpfCnpjValue.length !== 11 && cpfCnpjValue.length !== 14) {
+        } else if (cpfCnpjValue.length !== 11 && cpfCnpjValue.length !== 14) {
             cpfCnpjHelp.textContent = 'CPF ou CNPJ inválido';
             cpfCnpjHelp.style.display = 'block';
             cpfCnpjInput.style.border = '1px solid #dc2626';
             hasError = true;
-        }
-        else {
+        } else {
             cpfCnpjHelp.style.display = 'none';
             cpfCnpjInput.style.border = '1px solid #22c55e';
         }
 
-        // Validação do Nome/Fantasia (mínimo 3 caracteres):
+        // Validação do Nome/Fantasia:
         if (!nomeInput.value.trim()) {
             nomeHelp.textContent = 'Campo obrigatório';
             nomeHelp.style.display = 'block';
             nomeInput.style.border = '1px solid #dc2626';
             hasError = true;
-        }
-        else if (nomeInput.value.trim().length < 3) {
+        } else if (nomeInput.value.trim().length < 3) {
             nomeHelp.textContent = 'Digite pelo menos 3 letras';
             nomeHelp.style.display = 'block';
             nomeInput.style.border = '1px solid #dc2626';
             hasError = true;
+        } else {
+            nomeHelp.style.display = 'none';
+            nomeInput.style.border = '1px solid #22c55e';
         }
 
-        // Validação da Razão Social (se estiver visível: mínimo de 3 caracteres):
+        // Validação da Razão Social (se visível):
         if (razaoSocialGroup.style.display === 'block') {
             if (!razaoSocialInput.value.trim()) {
                 razaoSocialHelp.textContent = 'Campo obrigatório';
                 razaoSocialHelp.style.display = 'block';
                 razaoSocialInput.style.border = '1px solid #dc2626';
                 hasError = true;
-            }
-            else if (razaoSocialInput.value.trim().length < 3) {
+            } else if (razaoSocialInput.value.trim().length < 3) {
                 razaoSocialHelp.textContent = 'Digite pelo menos 3 letras';
                 razaoSocialHelp.style.display = 'block';
                 razaoSocialInput.style.border = '1px solid #dc2626';
                 hasError = true;
+            } else {
+                razaoSocialHelp.style.display = 'none';
+                razaoSocialInput.style.border = '1px solid #22c55e';
             }
         }
 
-        // Validação do E-mail (só valida se for preenchido):
+        // Validação do E-mail (só valida se preenchido):
         const emailValue = emailInput.value.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (emailValue) {
-            if (!emailRegex.test(emailValue)) {
-                emailHelp.textContent = 'Por favor, insira um e-mail válido';
-                emailHelp.style.display = 'block';
-                emailInput.style.border = '1px solid #dc2626';
-                hasError = true;
-            }
-            else {
-                emailHelp.style.display = 'none';   // Manter borda verde se já estiver válida ao perder o foco
-            }
-        }
-        else {
+        if (emailValue && !emailRegex.test(emailValue)) {
+            emailHelp.textContent = 'Por favor, insira um e-mail válido.';
+            emailHelp.style.display = 'block';
+            emailInput.style.border = '1px solid #dc2626';
+            hasError = true;
+        } else if (emailValue) { // Se preenchido e válido
+            emailHelp.style.display = 'none';
+            emailInput.style.border = '1px solid #22c55e';
+        } else { // Se vazio
             emailHelp.style.display = 'none';
             emailInput.style.border = '';
         }
 
-        // Validação da senha:
+        // Validação da Senha:
         const senhaValue = passwordInput.value;
-        const senhaValidacao = validarSenha(senhaValue);
+        const senhaValida = atualizarFeedbackRequisitos(senhaValue); // Garante que o feedback visual esteja atualizado
 
-        if (!senhaValidacao.valido) {
-            senhaHelp.textContent = senhaValidacao.mensagem;
-            senhaHelp.style.display = 'block';
+        if (!senhaValida) {
             passwordInput.style.border = '1px solid #dc2626';
+            if (senhaValue.length === 0) {
+                senhaHelp.textContent = 'Campo obrigatório';
+                senhaHelp.style.display = 'block';
+            } else {
+                senhaHelp.textContent = 'Senha não atende a todos os requisitos.'; // Mensagem mais genérica para senha inválida
+                senhaHelp.style.display = 'block';
+            }
             hasError = true;
-        }
-        else {
+        } else {
             senhaHelp.style.display = 'none';
             passwordInput.style.border = '1px solid #22c55e';
         }
 
         if (hasError) {
-            event.preventDefault();     // Para impedir que o formulário seja enviado com erros
+            event.preventDefault(); // Impede que o formulário seja enviado com erros
         }
     });
 });
