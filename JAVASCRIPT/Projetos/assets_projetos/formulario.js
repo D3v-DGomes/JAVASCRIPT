@@ -282,6 +282,21 @@ document.addEventListener('DOMContentLoaded', () => {
             emailInput.style.border = '';
         }
 
+        // Validação da senha:
+        const senhaValue = passwordInput.value;
+        const senhaValidacao = validarSenha(senhaValue);
+
+        if (!senhaValidacao.valido) {
+            senhaHelp.textContent = senhaValidacao.mensagem;
+            senhaHelp.style.display = 'block';
+            passwordInput.style.border = '1px solid #dc2626';
+            hasError = true;
+        }
+        else {
+            senhaHelp.style.display = 'none';
+            passwordInput.style.border = '1px solid #22c55e';
+        }
+
         if (hasError) {
             event.preventDefault();     // Para impedir que o formulário seja enviado com erros
         }
