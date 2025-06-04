@@ -103,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
             cpfCnpjHelp.style.display = 'none'; // Oculta a mensagem ao digitar
             resetInputBorder(cpfCnpjInput); // Remove borda ao digitar
         }
-
     });
 
     cpfCnpjInput.addEventListener('blur', () => {
@@ -331,6 +330,22 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             senhaHelp.style.display = 'none';
             passwordInput.style.border = '1px solid #22c55e';
+        }
+
+        // Validação do WhatsApp (se existir):
+        const whatsappValue = whatsappInput ? whatsappInput.value.replace(/\D/g, '') : '';
+        if (whatsappInput && whatsappValue.length > 0 && (whatsappValue.length < 10 || whatsappValue.length > 11)) {
+            whatsappInput.style.border = '1px solid #dc2626';
+            whatsappHelp.textContent = 'Número de WhatsApp inválido (mín. 10, máx. 11 dígitos).';
+            whatsappHelp.style.display = 'block';
+            hasError = true;
+            errorDetails.push("WhatsApp: Número inválido.");
+        } else if (whatsappInput && whatsappValue.length > 0) { // Se preenchido e válido
+            whatsappInput.style.border = '1px solid #22c55e';
+            whatsappHelp.style.display = 'none';
+        } else if (whatsappInput) { // Se vazio (e não obrigatório, ajusta conforme sua regra)
+            resetInputBorder(whatsappInput);
+            whatsappHelp.style.display = 'none';
         }
 
         if (!hasError) {
