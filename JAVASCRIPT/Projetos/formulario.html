@@ -43,7 +43,10 @@
 
             <div class="form-group" id="passwordGroup">
                 <label class="form-label" for="senha">Senha:</label>
-                <input type="password" id="password" name="password">
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="password" id="password" name="password">
+                    <span type="button" id="togglePassword" style="cursor: pointer; color: #007aff; font-size: 1.1em; position: absolute; right: 10px;">EXIBIR</span>
+                </div>
                 <div id="passwordRequirements" style="font-size: small; margin-top: 5px;">
                     <p id="passwordLength" class="text-danger">Mínimo de 8 caracteres</p>
                     <p id="passwordUppercase" class="text-danger">Pelo menos 1 letra maiúscula</p>

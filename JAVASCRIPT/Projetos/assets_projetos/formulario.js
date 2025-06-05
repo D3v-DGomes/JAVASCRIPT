@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordUppercase = document.getElementById('passwordUppercase');
     const passwordSpecial = document.getElementById('passwordSpecial');
 
+    // Botão para exibir a senha:
+    const togglePassword = document.getElementById('togglePassword');
+
     // Função para verificar os requisitos da senha e retornar o status de cada um:
     function verificarRequisitosSenha(senha) {
         return {
@@ -240,6 +243,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // Botão para exibir senha:
+    if (togglePassword) {
+        togglePassword.addEventListener('click', function () {
+            // Alternando o tipo do input entre senha e texto:
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Alternando o texto do botão:
+            if (type === 'password') {
+                this.textContent = 'EXIBIR';
+            } else {
+                this.textContent = 'OCULTAR';
+            }
+        });
+    }
 
 
     // --- Verificação Final dos campos obrigatórios no submit ---
